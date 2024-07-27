@@ -6,7 +6,7 @@ from src.tleng2 import *
 from src.menu import world as Menu
 
 GlobalSettings.update_bresolution((1280,720))
-RendererMethods.load_displays(RESIZABLE)
+RendererMethods.load_displays(HWSURFACE|DOUBLEBUF|RESIZABLE)
 EngineMethods.set_caption("TL Editor")
 
 GlobalSettings._fps = 60
@@ -15,6 +15,7 @@ GlobalSettings._fps = 60
 GlobalSettings._debug = False
 
 def main():
+    # pygame.mixer.pre_init(44100, 16, 2, 4096)
     pygame.init()
 
     game = Game()
