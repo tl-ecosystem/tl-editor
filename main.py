@@ -1,5 +1,5 @@
 import pygame
-from pygame.locals import *
+from pygame.locals import HWSURFACE, DOUBLEBUF, RESIZABLE
 
 from src.tleng2 import *
 
@@ -15,7 +15,7 @@ GlobalSettings._fps = 60
 GlobalSettings._debug = False
 
 def main():
-    # pygame.mixer.pre_init(44100, 16, 2, 4096)
+    pygame.mixer.pre_init(44100, 16, 2, 4096)
     pygame.init()
 
     game = Game()
