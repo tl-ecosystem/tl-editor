@@ -1,7 +1,7 @@
 import pygame
 from pygame import FRect
 
-from dataclasses import dataclass
+# from dataclasses import dataclass
 
 from .tleng2 import *
 
@@ -9,6 +9,9 @@ from .tleng2 import *
 from .tleng2.object.area import AreaComp
 from .tleng2.components.camera import MainCameraComp, CameraComp
 from .tleng2.components.renderable import DisplayCanvasComp, RenderableComp
+from .tleng2.components.engine import FpsComp
+from .tleng2.components.events import QuitGameEvent
+from .tleng2.components.scene import SceneComp
 from .tleng2.systems.engine_syst import ClockTickSystem
 from .tleng2.systems.renderer import RendererSystem, ResizeWindowEvent
 from .tleng2.uix.ui_canvas import UICanvas
@@ -17,24 +20,15 @@ from .tleng2.utils.event_manager import set_handler
 from .tleng2.utils.colors import AQUAMARINE, WHITESMOKE
 
 
-world = ecs.World(events=True)
+world = ecs.World()
 
 RendererProperties.fill_screen_color = AQUAMARINE
 
-@dataclass
-class QuitGameEvent: ...
-
-world.append_unique_components(
-    {
-        DisplayCanvasComp: DisplayCanvasComp(GlobalSettings._win_res),
-        ecs.EventsComp : ecs.EventsComp(
-            [
-                QuitGameEvent,
-                ResizeWindowEvent,
-            ]
-        )
-    }
+world.append_resources(
+    DisplayCanvasComp(GlobalSettings._win_res),
+    FpsComp(2000)
 )
+
 
 display_canvas = world.spawn(
     DisplayCanvasComp(GlobalSettings._win_res)
@@ -65,7 +59,6 @@ e1 = world.spawn(
     )
 )
 
-
 e2 = world.spawn(
     RenderableComp(
         srf,
@@ -94,8 +87,6 @@ ui = world.spawn(
     ),
 )
 
-world_scheduler = ecs.Schedule()
-
 
 class HandleEventsSystem(ecs.System):
     def update(self) -> None:
@@ -108,6 +99,7 @@ class HandleEventsSystem(ecs.System):
 
 class QuitGameSystem(ecs.System):
     def update(self) -> None:
+        
         events = self.world.events.read(QuitGameEvent)
         if events:
             EngineProperties.GAME_RUNNING = False
@@ -117,16 +109,19 @@ class LogicSystem(ecs.System):
     def update(self) -> None:
         # print(self.world.schedule.system_schedule[1]._display)
         EngineMethods.set_caption(f"{EngineProperties._clock.get_fps():.2f}")
-        print('newframe')
-        print(*[event for event in EngineProperties._events], sep='\n')
+        if EngineProperties._clock.get_fps() < 200:
+            print(True)
+        
+        events = self.world.events.read(QuitGameEvent)
+
         # print(f"{EngineProperties._clock.get_fps():.2f}")
 
 
+menu_scheduler = ecs.Schedule()
 
-# set_handler('QUIT', pygame_quit_handler)
-# set_handler('RESIZE', )
 
-world_scheduler.add_systems(
+menu_scheduler.add_systems(
+    'Update',
     ecs.EventManagerSystem(11),
     HandleEventsSystem(10),
     LogicSystem(1),
@@ -136,4 +131,9 @@ world_scheduler.add_systems(
     ClockTickSystem(-2)
 )
 
-world.use_schedule(world_scheduler)
+
+
+menu_scene = SceneComp(
+    world.return_world_component(),
+    menu_scheduler
+)
