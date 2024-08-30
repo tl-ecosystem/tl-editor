@@ -32,11 +32,6 @@ def main():
 
     # game.
 
-    game.load_worlds(
-        start_with='menu',
-        menu=Menu,
-    )
-
     game.load_scenes(
         start_with='menu',
         menu = menu_scene
@@ -48,7 +43,6 @@ def main():
 if __name__ == "__main__":
     main()
 
-# Decoupling schedules from the world. 
 # Add states so there can be multiple schedules for one world.
 
 # resources for the 'App'
