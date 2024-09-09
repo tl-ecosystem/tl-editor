@@ -27,10 +27,8 @@ def main():
     game = App()
 
     game.use_plugins(
-        tleng_plugin
+        tleng_base_plugin
     )
-
-    # game.
 
     game.load_scenes(
         start_with='menu',
