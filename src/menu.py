@@ -1,6 +1,7 @@
 import pygame
 from pygame import FRect
 
+
 # from dataclasses import dataclass
 
 from .tleng2 import *
@@ -80,39 +81,71 @@ e4 = world.spawn(
     )
 )
 
-ui = world.spawn(
-    UICanvas(
-        # Image(),
-        # Button(),
-    ),
+
+e4 = world.spawn(
+    RenderableComp(
+        srf,
+        FRect(230,120,10,10),
+    )
 )
+
+e4 = world.spawn(
+    RenderableComp(
+        srf,
+        FRect(340,120,10,10),
+    )
+)
+
+e4 = world.spawn(
+    RenderableComp(
+        srf,
+        FRect(230,10,10,10),
+    )
+)
+# ui = world.spawn(
+#     UICanvas(
+#         # Image(),
+#         # Button(),
+#     ),
+# )
 
 
 class HandleEventsSystem(ecs.System):
+    def parameters(self, events: ecs.Events):
+        self.events = events
+
     def update(self) -> None:
         for event in EngineProperties._events:
             if event.type == pygame.QUIT:
-                self.world.events.send(QuitGameEvent())
+                self.events.send(QuitGameEvent())
             if event.type == pygame.WINDOWRESIZED:
-                self.world.events.send(ResizeWindowEvent())
+                self.events.send(ResizeWindowEvent())
 
 
 class QuitGameSystem(ecs.System):
+    def parameters(self, world: ecs.World, events: ecs.Events):
+        self.world = world
+        self.events = events
+
     def update(self) -> None:
         
-        events = self.world.events.read(QuitGameEvent)
+        events = self.events.read(QuitGameEvent)
         if events:
             EngineProperties.GAME_RUNNING = False
 
 
 class LogicSystem(ecs.System):
+    def parameters(self, world: ecs.World, events: ecs.Events):
+        self.world = world
+        self.events = events
+
     def update(self) -> None:
         # print(self.world.schedule.system_schedule[1]._display)
         EngineMethods.set_caption(f"{EngineProperties._clock.get_fps():.2f}")
         if EngineProperties._clock.get_fps() < 200:
             print(True)
         
-        events = self.world.events.read(QuitGameEvent)
+        events = self.events.read(QuitGameEvent)
 
         # print(f"{EngineProperties._clock.get_fps():.2f}")
 

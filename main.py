@@ -2,7 +2,6 @@ import pygame
 from pygame.locals import HWSURFACE, DOUBLEBUF, RESIZABLE
 
 from src.tleng2 import *
-from src.tleng2.utils.colors import PURPLE
 
 from src.menu import world as Menu
 from src.menu import menu_scene
@@ -20,7 +19,7 @@ GlobalSettings._fps = 60
 GlobalSettings._debug = False
 
 
-def main():
+def main() -> None:
     pygame.mixer.pre_init(44100, 16, 2, 4096)
     pygame.init()
 
@@ -32,7 +31,7 @@ def main():
 
     game.load_scenes(
         start_with='menu',
-        menu = menu_scene
+        menu=menu_scene
     )
 
     game.run()
