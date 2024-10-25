@@ -11,15 +11,15 @@ from .tleng2.object.area import AreaComp
 from .tleng2.components.camera import MainCameraComp, CameraComp
 from .tleng2.components.renderable import DisplayCanvasComp, RenderableComp
 from .tleng2.components.engine import FpsComp
-from .tleng2.components.events import QuitGameEvent
 from .tleng2.components.scene import SceneComp
 from .tleng2.systems.engine_syst import ClockTickSystem
-from .tleng2.systems.renderer import RendererSystem, ResizeWindowEvent
+from .tleng2.systems.renderer import RendererSystem
 from .tleng2.uix.ui_canvas import UICanvas
 # from .tleng2.uix import UICanvas, UICanvasDrawSystem, BoxLayout
 from .tleng2.utils.event_manager import set_handler
 from .tleng2.utils.colors import AQUAMARINE, WHITESMOKE
 
+from .defaults import HandleEventsSystem, QuitGameSystem, LogicSystem
 
 world = ecs.World()
 
@@ -110,44 +110,6 @@ e4 = world.spawn(
 # )
 
 
-class HandleEventsSystem(ecs.System):
-    def parameters(self, events: ecs.Events):
-        self.events = events
-
-    def update(self) -> None:
-        for event in EngineProperties._events:
-            if event.type == pygame.QUIT:
-                self.events.send(QuitGameEvent())
-            if event.type == pygame.WINDOWRESIZED:
-                self.events.send(ResizeWindowEvent())
-
-
-class QuitGameSystem(ecs.System):
-    def parameters(self, world: ecs.World, events: ecs.Events):
-        self.world = world
-        self.events = events
-
-    def update(self) -> None:
-        
-        events = self.events.read(QuitGameEvent)
-        if events:
-            EngineProperties.GAME_RUNNING = False
-
-
-class LogicSystem(ecs.System):
-    def parameters(self, world: ecs.World, events: ecs.Events):
-        self.world = world
-        self.events = events
-
-    def update(self) -> None:
-        # print(self.world.schedule.system_schedule[1]._display)
-        EngineMethods.set_caption(f"{EngineProperties._clock.get_fps():.2f}")
-        if EngineProperties._clock.get_fps() < 200:
-            print(True)
-        
-        events = self.events.read(QuitGameEvent)
-
-        # print(f"{EngineProperties._clock.get_fps():.2f}")
 
 
 menu_scheduler = ecs.Schedule()

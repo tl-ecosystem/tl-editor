@@ -3,9 +3,9 @@ from pygame.locals import HWSURFACE, DOUBLEBUF, RESIZABLE
 
 from src.tleng2 import *
 
-from src.menu import world as Menu
-from src.menu import menu_scene
 
+from src.menu import menu_scene
+from src.settings import settings_scene
 
 hide_pygame_support_prompt()
 
@@ -30,8 +30,9 @@ def main() -> None:
     )
 
     game.load_scenes(
-        start_with='menu',
-        menu=menu_scene
+        start_with='settings',
+        menu=menu_scene,
+        settings=settings_scene
     )
 
     game.run()
