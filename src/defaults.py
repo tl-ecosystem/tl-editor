@@ -5,6 +5,7 @@ from .tleng2 import *
 
 from .tleng2.systems.renderer import ResizeWindowEvent
 from .tleng2.components.events import QuitGameEvent
+from .tleng2.components.renderable import RenderableComp
 
 
 class HandleEventsSystem(ecs.System):
@@ -41,12 +42,21 @@ class QuitGameSystem(ecs.System):
 class LogicSystem(ecs.System):
     def parameters(self, world: ecs.World, events: ecs.Events):
         self.world = world
-        self.events = events
 
     def update(self) -> None:
         # print(self.world.schedule.system_schedule[1]._display)
-        EngineMethods.set_caption(f"{EngineProperties._clock.get_fps():.2f}")
-        if EngineProperties._clock.get_fps() < 200:
-            print(True)
+        pygame.display.set_caption(f"{EngineProperties._clock.get_fps():.2f}")
+        # ...
+
+class MoveBoxSystem(ecs.System):
+    def parameters(self, world: ecs.World) -> None:
+        self.world = world
+    
+    def update(self) -> None:
+        components = self.world.single_fast_query(RenderableComp)
+
+        for e, renderable in components:
+            renderable.rect.x += 0.7
+            if renderable.rect.x > GlobalSettings._win_res[0]:
+                renderable.rect.x = 0
         
-        events = self.events.read(QuitGameEvent)

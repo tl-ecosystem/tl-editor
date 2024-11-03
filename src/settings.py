@@ -14,18 +14,15 @@ from .tleng2.systems.engine_syst import ClockTickSystem
 
 from .tleng2.utils.colors import AZURE
 
-from .defaults import HandleEventsSystem, QuitGameSystem, LogicSystem
-
-
+from .defaults import HandleEventsSystem, MoveBoxSystem, QuitGameSystem, LogicSystem
 
 
 world = ecs.World()
 
 
-
 world.append_resources(
     DisplayCanvasComp(GlobalSettings._win_res),
-    FpsComp(60)
+    FpsComp(2000)
 )
 
 display_canvas = world.spawn(
@@ -56,6 +53,7 @@ e1 = world.spawn(
         FRect(10,10,10,10),
     )
 )
+        
 
 
 settings_scheduler = ecs.Schedule()
@@ -64,8 +62,9 @@ settings_scheduler.add_systems(
     'Update',
     ecs.EventManagerSystem(11),
     HandleEventsSystem(10),
-    LogicSystem(1),
+    LogicSystem(),
     QuitGameSystem(),
+    MoveBoxSystem(),
     # DrawUICanvasSystem(0),
     RendererSystem(-1),
     ClockTickSystem(-2)

@@ -1,7 +1,6 @@
 import pygame
 from pygame import FRect
 
-
 # from dataclasses import dataclass
 
 from .tleng2 import *
@@ -19,7 +18,7 @@ from .tleng2.uix.ui_canvas import UICanvas
 from .tleng2.utils.event_manager import set_handler
 from .tleng2.utils.colors import AQUAMARINE, WHITESMOKE
 
-from .defaults import HandleEventsSystem, QuitGameSystem, LogicSystem
+from .defaults import HandleEventsSystem, MoveBoxSystem, QuitGameSystem, LogicSystem
 
 world = ecs.World()
 
@@ -53,62 +52,20 @@ camera1 = world.spawn(
 # enviroment
 srf = pygame.Surface((100,100))
 srf.fill(WHITESMOKE)
-e1 = world.spawn(
-    RenderableComp(
-        srf,
-        FRect(10,10,10,10),
+
+num = 3000
+
+import random
+
+for x in range(num):
+    srf = pygame.Surface((100,100))
+    srf.fill((random.randint(0,255),random.randint(0,255),random.randint(0,255)))
+    world.spawn(
+        RenderableComp(
+            srf,
+            FRect(random.randint(0,1200),random.randint(0, 600),100,100),
+        )
     )
-)
-
-e2 = world.spawn(
-    RenderableComp(
-        srf,
-        FRect(10,120,10,10),
-    )
-)
-
-e3 = world.spawn(
-    RenderableComp(
-        srf,
-        FRect(120,10,10,10),
-    )
-)
-
-e4 = world.spawn(
-    RenderableComp(
-        srf,
-        FRect(120,120,10,10),
-    )
-)
-
-
-e4 = world.spawn(
-    RenderableComp(
-        srf,
-        FRect(230,120,10,10),
-    )
-)
-
-e4 = world.spawn(
-    RenderableComp(
-        srf,
-        FRect(340,120,10,10),
-    )
-)
-
-e4 = world.spawn(
-    RenderableComp(
-        srf,
-        FRect(230,10,10,10),
-    )
-)
-# ui = world.spawn(
-#     UICanvas(
-#         # Image(),
-#         # Button(),
-#     ),
-# )
-
 
 
 
@@ -121,11 +78,11 @@ menu_scheduler.add_systems(
     HandleEventsSystem(10),
     LogicSystem(1),
     QuitGameSystem(),
+    MoveBoxSystem(),
     # DrawUICanvasSystem(0),
     RendererSystem(-1),
     ClockTickSystem(-2)
 )
-
 
 
 menu_scene = SceneComp(
