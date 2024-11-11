@@ -66,7 +66,6 @@ settings_scheduler.add_systems(
     QuitGameSystem(),
     MoveBoxSystem(),
     # DrawUICanvasSystem(0),
-    RendererSystem(-1),
     ClockTickSystem(-2)
 )
 

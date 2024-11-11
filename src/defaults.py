@@ -1,5 +1,7 @@
 import pygame
+import math
 
+from setuptools import sic
 
 from .tleng2 import *
 
@@ -45,7 +47,7 @@ class LogicSystem(ecs.System):
 
     def update(self) -> None:
         # print(self.world.schedule.system_schedule[1]._display)
-        pygame.display.set_caption(f"{EngineProperties._clock.get_fps():.2f}")
+        pygame.display.set_caption(f"{EngineProperties._clock.get_fps():.2f} | {(EngineProperties._dt):.5f} ms'")
         # ...
 
 class MoveBoxSystem(ecs.System):
@@ -57,6 +59,7 @@ class MoveBoxSystem(ecs.System):
 
         for e, renderable in components:
             renderable.rect.x += 0.7
+            renderable.rect.y += math.sin(renderable.rect.x/10)*10
             if renderable.rect.x > GlobalSettings._win_res[0]:
                 renderable.rect.x = 0
         

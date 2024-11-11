@@ -19,7 +19,7 @@ GlobalSettings._fps = 60
 GlobalSettings._debug = False
 
 
-def main_test() -> None:
+def main_test(time: int) -> None:
     pygame.mixer.pre_init(44100, 16, 2, 4096)
     pygame.init()
 
@@ -35,19 +35,17 @@ def main_test() -> None:
         settings=settings_scene
     )
 
-    game._run_test(6)
-
-def profile():
     from cProfile import Profile
     from pstats import SortKey, Stats
     with Profile() as profile:
-        main_test()
+        game._run_test(time)
         (
             Stats(profile)
             .strip_dirs()
             .sort_stats(SortKey.CUMULATIVE)
             .print_stats()
         )
+
 
 
 def main() -> None:
@@ -69,8 +67,9 @@ def main() -> None:
     game.run()
 
 if __name__ == "__main__":
-    main()
+    # main()
     # profile()
+    main_test(5)
 
 # Add states so there can be multiple schedules for one world.
 

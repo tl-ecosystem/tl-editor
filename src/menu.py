@@ -53,7 +53,7 @@ camera1 = world.spawn(
 srf = pygame.Surface((100,100))
 srf.fill(WHITESMOKE)
 
-num = 3000
+num = 2
 
 import random
 
@@ -80,7 +80,7 @@ menu_scheduler.add_systems(
     QuitGameSystem(),
     MoveBoxSystem(),
     # DrawUICanvasSystem(0),
-    RendererSystem(-1),
+    # RendererSystem(-1),
     ClockTickSystem(-2)
 )
 
