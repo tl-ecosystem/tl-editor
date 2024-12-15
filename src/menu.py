@@ -1,3 +1,4 @@
+import random
 import pygame
 from pygame import FRect
 
@@ -5,20 +6,16 @@ from pygame import FRect
 
 from .tleng2 import *
 
-# from .tleng2.ecs.events import EventComp, HandleEventsSystem, pygame_quit_handler
 from .tleng2.object.area import AreaComp
 from .tleng2.components.camera import MainCameraComp, CameraComp
 from .tleng2.components.renderable import DisplayCanvasComp, RenderableComp
 from .tleng2.components.engine import FpsComp
 from .tleng2.components.scene import SceneComp
-from .tleng2.systems.engine_syst import ClockTickSystem
-from .tleng2.systems.renderer import RendererSystem
 from .tleng2.uix.ui_canvas import UICanvas
 # from .tleng2.uix import UICanvas, UICanvasDrawSystem, BoxLayout
-from .tleng2.utils.event_manager import set_handler
 from .tleng2.utils.colors import AQUAMARINE, WHITESMOKE
 
-from .defaults import HandleEventsSystem, MoveBoxSystem, QuitGameSystem, LogicSystem
+from .defaults import HandleEventsSystem, MoveBoxSystem, QuitGameSystem, TimeSystem
 
 world = ecs.World()
 
@@ -55,8 +52,6 @@ srf.fill(WHITESMOKE)
 
 num = 2
 
-import random
-
 for x in range(num):
     srf = pygame.Surface((100,100))
     srf.fill((random.randint(0,255),random.randint(0,255),random.randint(0,255)))
@@ -68,20 +63,16 @@ for x in range(num):
     )
 
 
-
 menu_scheduler = ecs.Schedule()
-
 
 menu_scheduler.add_systems(
     'Update',
     ecs.EventManagerSystem(11),
     HandleEventsSystem(10),
-    LogicSystem(1),
+    TimeSystem(1),
     QuitGameSystem(),
     MoveBoxSystem(),
     # DrawUICanvasSystem(0),
-    # RendererSystem(-1),
-    ClockTickSystem(-2)
 )
 
 

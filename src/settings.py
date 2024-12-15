@@ -9,12 +9,11 @@ from .tleng2.components.camera import MainCameraComp, CameraComp
 from .tleng2.components.scene import SceneComp
 from .tleng2.components.engine import FpsComp
 from .tleng2.components.renderable import DisplayCanvasComp, RenderableComp
-from .tleng2.systems.renderer import RendererSystem
-from .tleng2.systems.engine_syst import ClockTickSystem
+from .tleng2.systems.engine_systems import ClockTickSystem
 
 from .tleng2.utils.colors import AZURE
 
-from .defaults import HandleEventsSystem, MoveBoxSystem, QuitGameSystem, LogicSystem
+from .defaults import HandleEventsSystem, MoveBoxSystem, QuitGameSystem, TimeSystem
 
 
 world = ecs.World()
@@ -62,7 +61,7 @@ settings_scheduler.add_systems(
     'Update',
     ecs.EventManagerSystem(11),
     HandleEventsSystem(10),
-    LogicSystem(),
+    TimeSystem(),
     QuitGameSystem(),
     MoveBoxSystem(),
     # DrawUICanvasSystem(0),
