@@ -71,7 +71,6 @@ e1 = world.spawn(
 )
         
 
-
 settings_scheduler = ecs.Schedule()
 
 settings_scheduler.add_systems(

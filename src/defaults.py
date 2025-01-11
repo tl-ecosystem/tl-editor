@@ -99,4 +99,3 @@ class MoveBoxSystem(ecs.System):
             renderable.rect.y += math.sin(renderable.rect.x/10)
             if renderable.rect.x > GlobalSettings._win_res[0]:
                 renderable.rect.x = 0
-        
