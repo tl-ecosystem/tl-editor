@@ -18,6 +18,7 @@
 import pygame
 import sys
 import json
+import os
 import numpy as np
 
 # Initialize Pygame
@@ -28,19 +29,20 @@ SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 TILE_SIZE = 35
 GRID_WIDTH, GRID_HEIGHT = 100, 100  # Grid dimensions
 
-# Tile images
-TILE_IMAGES = [
-    pygame.Surface((TILE_SIZE, TILE_SIZE)),  # Placeholder for empty tile
-    pygame.image.load("test/tiles/box.png"),  # Example tile 1
-    pygame.image.load("test/tiles/box1.png"),  # Example tile 2
-    pygame.image.load("assets/road_straight_left.png"),  # Example tile 3
-]
+# Load tile images dynamically from the assets folder
+ASSETS_FOLDER = "assets"
+TILE_IMAGES = [pygame.Surface((TILE_SIZE, TILE_SIZE))]  # First index for "empty" tiles
+tile_names = ["empty"]  # Keep track of tile names for debugging
 
-# Scale images to TILE_SIZE
-for i in range(1, len(TILE_IMAGES)):
-    TILE_IMAGES[i] = pygame.transform.scale(TILE_IMAGES[i], (TILE_SIZE, TILE_SIZE))
+for filename in sorted(os.listdir(ASSETS_FOLDER)):
+    if filename.endswith((".png", ".jpg", ".jpeg")):
+        tile_path = os.path.join(ASSETS_FOLDER, filename)
+        tile_image = pygame.image.load(tile_path)
+        tile_image = pygame.transform.scale(tile_image, (TILE_SIZE, TILE_SIZE))
+        TILE_IMAGES.append(tile_image)
+        tile_names.append(filename)  # Store the name of the file
 
-current_tile = 1
+current_tile = 1  # Start with the first tile (1 because 0 is "empty")
 current_rotation = 0
 camera_x, camera_y = 0, 0
 
@@ -106,14 +108,13 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 4:  # Scroll up
+                current_tile = (current_tile - 1) % len(TILE_IMAGES)
+            elif event.button == 5:  # Scroll down
+                current_tile = (current_tile + 1) % len(TILE_IMAGES)
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_1:
-                current_tile = 1
-            elif event.key == pygame.K_2:
-                current_tile = 2
-            elif event.key == pygame.K_3:
-                current_tile = 3
-            elif event.key == pygame.K_r:
+            if event.key == pygame.K_r:
                 current_rotation = (current_rotation + 90) % 360
             elif event.key == pygame.K_s:
                 save_tiles_to_json(tiles, rotations, 'tiles.json')
@@ -151,6 +152,12 @@ while running:
     if 0 <= preview_x < GRID_WIDTH and 0 <= preview_y < GRID_HEIGHT:
         rotated_preview = pygame.transform.rotate(TILE_IMAGES[current_tile], current_rotation)
         screen.blit(rotated_preview, (preview_x * TILE_SIZE - camera_x, preview_y * TILE_SIZE - camera_y))
+
+    # Display current tile info
+    font = pygame.font.SysFont(None, 24)
+    tile_info = f"Tile: {tile_names[current_tile]} ({current_tile}), Rotation: {current_rotation}°"
+    text = font.render(tile_info, True, (0, 0, 0))
+    screen.blit(text, (10, 10))
 
     # Update the display
     pygame.display.flip()
