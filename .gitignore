@@ -164,3 +164,4 @@ cython_debug/
 /test
 /.vscode
 tiles.json
+mapped_points.json
