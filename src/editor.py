@@ -8,7 +8,7 @@ import numpy as np
 pygame.init()
 
 # Screen dimensions and grid settings
-SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
+SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
 TILE_SIZE = 35
 GRID_WIDTH, GRID_HEIGHT = 100, 100  # Grid dimensions
 NUM_LAYERS = 9  # Maximum number of layers (1-9)
@@ -79,7 +79,7 @@ def load_tiles_from_json(filename):
 
 # Create the screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Tilemap Editor with Layers and Opacity")
+pygame.display.set_caption("Tilemap Editor - tl-editor")
 
 # Main loop
 running = True
