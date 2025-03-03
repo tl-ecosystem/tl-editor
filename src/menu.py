@@ -24,10 +24,11 @@ from pygame import FRect
 from .tleng2 import *
 
 from .tleng2.object.area import AreaComp
+
 from .tleng2.components.camera import MainCameraComp, CameraComp
 from .tleng2.components.renderable import DisplayCanvasComp, RenderableComp
 from .tleng2.components.engine import FpsComp
-from .tleng2.components.scene import SceneComp
+
 from .tleng2.uix.ui_canvas import UICanvas
 # from .tleng2.uix import UICanvas, UICanvasDrawSystem, BoxLayout
 from .tleng2.utils.colors import AQUAMARINE, WHITESMOKE
@@ -80,20 +81,20 @@ for x in range(num):
     )
 
 
-menu_scheduler = ecs.Schedule()
+menu_scheduler = ecs.Scheduler()
 
 menu_scheduler.add_systems(
     'Update',
-    ecs.EventManagerSystem(11),
-    HandleEventsSystem(10),
-    TimeSystem(1),
+    ecs.EventManagerSystem(),
+    HandleEventsSystem(),
+    TimeSystem(),
     QuitGameSystem(),
     MoveBoxSystem(),
     # DrawUICanvasSystem(0),
 )
 
 
-menu_scene = SceneComp(
+menu_scene = ecs.SceneComp(
     world.return_world_component(),
     menu_scheduler
 )

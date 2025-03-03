@@ -21,11 +21,13 @@ from pygame import FRect
 from .tleng2 import *
 
 from .tleng2.object.area import AreaComp
+
 from .tleng2.components.renderable import DisplayCanvasComp
 from .tleng2.components.camera import MainCameraComp, CameraComp
-from .tleng2.components.scene import SceneComp
 from .tleng2.components.engine import FpsComp
 from .tleng2.components.renderable import DisplayCanvasComp, RenderableComp
+
+
 from .tleng2.systems.engine_systems import ClockTickSystem
 
 from .tleng2.utils.colors import AZURE
@@ -71,21 +73,21 @@ e1 = world.spawn(
 )
         
 
-settings_scheduler = ecs.Schedule()
+settings_scheduler = ecs.Scheduler()
 
 settings_scheduler.add_systems(
     'Update',
-    ecs.EventManagerSystem(11),
-    HandleEventsSystem(10),
+    ecs.EventManagerSystem(),
+    HandleEventsSystem(),
     TimeSystem(),
     QuitGameSystem(),
     MoveBoxSystem(),
     # DrawUICanvasSystem(0),
-    ClockTickSystem(-2)
+    ClockTickSystem()
 )
 
 
-settings_scene = SceneComp(
+settings_scene = ecs.SceneComp(
     world,
     settings_scheduler
 )

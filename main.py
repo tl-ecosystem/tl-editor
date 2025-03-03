@@ -82,8 +82,8 @@ def main() -> None:
     game.run()
 
 if __name__ == "__main__":
-    # main()
-    main_test(5)
+    main()
+    # main_test(5)
 
 # State machine for scenes (schedule side)
 #   Remove the systems schedule order, the order should be transistioned to the sequence types
